@@ -26,10 +26,27 @@
         	<groupId>org.springframework.data</groupId>
         	<artifactId>spring-data-mongodb</artifactId>
         	</dependency>
+        <dependency>
+            <groupId>org.springframework.hateoas</groupId>
+            <artifactId>spring-hateoas</artifactId>
+            <version>0.9.0.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.javax.persistence</groupId>
+            <artifactId>hibernate-jpa-2.0-api</artifactId>
+            <version>1.0.1.Final</version>
+        </dependency>
+
+        <!--Test dependencies-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+        </dependency>
+
     </dependencies>
 
     <properties>
-        <start-class>hello.Application</start-class>
+        <start-class>com.dino.ApplicationConfig</start-class>
     </properties>
 
     <build>
