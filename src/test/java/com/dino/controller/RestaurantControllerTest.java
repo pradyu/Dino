@@ -2,6 +2,7 @@ package com.dino.controller;
 
 import com.dino.ApplicationConfig;
 import com.dino.entity.Restaurant;
+import com.dino.repo.AbstractTest;
 import com.dino.rest.entity.RestaurantResource;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
@@ -9,6 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -24,10 +26,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {ApplicationConfig.class})
 @WebAppConfiguration
-public class RestaurantControllerTest {
+@ActiveProfiles("test")
+public class RestaurantControllerTest extends AbstractTest{
 
     private static ObjectMapper objectMapper = new ObjectMapper();
     @Autowired
@@ -36,11 +37,12 @@ public class RestaurantControllerTest {
 
     @Before
     public void setup() {
+        super.setup();
         mockMvc = MockMvcBuilders.<StandaloneMockMvcBuilder>webAppContextSetup(ctx).build();
     }
 
     @Test
-    public void canCreateRestaurant() throws Exception {
+    public void canCreateAndGetRestaurant() throws Exception {
         Restaurant restaurant = new Restaurant("test");
         MvcResult result = mockMvc.perform(
                 post("/restaurant")

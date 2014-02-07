@@ -12,7 +12,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 @ActiveProfiles("test")
-public class RestaurantRepositoryImplTest extends AbstractDbTest {
+public class RestaurantRepositoryImplTest extends AbstractTest {
 
     @Autowired
     @Qualifier("restaurantRepository")
