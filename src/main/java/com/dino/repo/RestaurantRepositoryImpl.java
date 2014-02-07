@@ -6,7 +6,6 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
-import java.math.BigInteger;
 import java.util.List;
 
 import static org.springframework.data.mongodb.core.query.Criteria.where;
@@ -30,7 +29,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepository {
     }
 
     @Override
-    public Restaurant getRestaurant(BigInteger id) {
+    public Restaurant getRestaurant(String id) {
         Query query = query(where("id").is(id));
         return operations.findOne(query, Restaurant.class);
     }
