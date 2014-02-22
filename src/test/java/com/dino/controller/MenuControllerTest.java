@@ -18,14 +18,14 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.test.web.servlet.setup.StandaloneMockMvcBuilder;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.dino.entity.Restaurant;
+import com.dino.entity.Menu;
 import com.dino.repo.AbstractTest;
-import com.dino.rest.entity.RestaurantResource;
+import com.dino.rest.entity.MenuResource;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebAppConfiguration
 @ActiveProfiles("test")
-public class RestaurantControllerTest extends AbstractTest{
+public class MenuControllerTest extends AbstractTest{
 
     private static ObjectMapper objectMapper = new ObjectMapper();
     @Autowired
@@ -39,13 +39,14 @@ public class RestaurantControllerTest extends AbstractTest{
     }
 
     @Test
-    public void canCreateAndGetRestaurant() throws Exception {
-        Restaurant restaurant = new Restaurant("test");
+    public void canCreateAndGetMenu() throws Exception {
+        Menu menu = new Menu("test");
         MvcResult result = mockMvc.perform(
-                post("/restaurant")
+                post("/restaurant/{id}/menu", "test")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(restaurant)))
+                        .content(objectMapper.writeValueAsString(menu)
+                        ))
                 .andExpect(status().isCreated())
                 .andReturn();
 
@@ -60,8 +61,8 @@ public class RestaurantControllerTest extends AbstractTest{
 
         String content = result.getResponse().getContentAsString();
         assertNotNull(content);
-        RestaurantResource response = objectMapper.readValue(content, RestaurantResource.class);
+        MenuResource response = objectMapper.readValue(content, MenuResource.class);
         assertNotNull(response);
-        assertEquals(restaurant.getName(), response.getRestaurant().getName());
+        assertEquals(menu.getRestaurantId(), response.getMenu().getRestaurantId());
     }
 }
