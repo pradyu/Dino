@@ -6,6 +6,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.List;
+
+import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,47 +24,73 @@ import org.springframework.web.context.WebApplicationContext;
 import com.dino.entity.Restaurant;
 import com.dino.repo.AbstractTest;
 import com.dino.rest.entity.RestaurantResource;
+import com.dino.yelp.YelpUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebAppConfiguration
 @ActiveProfiles("test")
-public class RestaurantControllerTest extends AbstractTest{
+public class RestaurantControllerTest extends AbstractTest {
 
-    private static ObjectMapper objectMapper = new ObjectMapper();
-    @Autowired
-    private WebApplicationContext ctx;
-    private MockMvc mockMvc;
+	private static ObjectMapper objectMapper = new ObjectMapper();
+	@Autowired
+	private WebApplicationContext ctx;
+	private MockMvc mockMvc;
+	private List<Restaurant> restaurantList;
 
-    @Before
-    public void setup() {
-        super.setup();
-        mockMvc = MockMvcBuilders.<StandaloneMockMvcBuilder>webAppContextSetup(ctx).build();
-    }
+	@Before
+	public void setup() {
+		super.setup();
+		mockMvc = MockMvcBuilders
+				.<StandaloneMockMvcBuilder> webAppContextSetup(ctx).build();
+		try {
+			setupYelpRestaurants();
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+	}
 
-    @Test
-    public void canCreateAndGetRestaurant() throws Exception {
-        Restaurant restaurant = new Restaurant("test");
-        MvcResult result = mockMvc.perform(
-                post("/restaurant")
-                        .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(restaurant)))
-                .andExpect(status().isCreated())
-                .andReturn();
+	@Test
+	public void canCreateAndGetRestaurant() throws Exception {
+		// Restaurant restaurant = new Restaurant("test");
+		for (Restaurant restaurant : restaurantList) {
 
-        String location = result.getResponse().getHeader("location");
-        assertNotNull(location);
+			MvcResult result = mockMvc
+					.perform(
+							post("/restaurant")
+							.accept(MediaType.APPLICATION_JSON)
+							.contentType(MediaType.APPLICATION_JSON)
+							.content(
+									objectMapper
+									.writeValueAsString(restaurant)))
+									.andExpect(status().isCreated()).andReturn();
 
-        result = mockMvc.perform(
-                get(location)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andReturn();
+			String location = result.getResponse().getHeader("location");
+			assertNotNull(location);
 
-        String content = result.getResponse().getContentAsString();
-        assertNotNull(content);
-        RestaurantResource response = objectMapper.readValue(content, RestaurantResource.class);
-        assertNotNull(response);
-        assertEquals(restaurant.getName(), response.getRestaurant().getName());
-    }
+			result = mockMvc
+					.perform(get(location).accept(MediaType.APPLICATION_JSON))
+					.andExpect(status().isOk()).andReturn();
+
+			String content = result.getResponse().getContentAsString();
+			assertNotNull(content);
+			RestaurantResource response = objectMapper.readValue(content,
+					RestaurantResource.class);
+			assertNotNull(response);
+			assertEquals(restaurant.getName(), response.getRestaurant()
+					.getName());
+			// Check response - restaurant name in the console
+			System.out.println(response.getRestaurant().getName());
+		}
+
+	}
+
+	@SuppressWarnings("deprecation")
+	@Test
+	public void isYelpDataNull() {
+		assertNotNull(restaurantList);
+	}
+
+	private void setupYelpRestaurants() throws JSONException {
+		restaurantList = YelpUtil.getRestaurantsFromYelp("italian", "New York");
+	}
 }
