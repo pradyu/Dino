@@ -6,7 +6,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
 
-@ComponentScan
+@ComponentScan("com.dino.service")
 @Import(MongoConfig.class)
 @EnableAutoConfiguration
 @EnableSpringDataWebSupport

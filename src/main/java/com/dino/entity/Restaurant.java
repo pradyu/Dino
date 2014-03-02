@@ -2,21 +2,35 @@ package com.dino.entity;
 
 import java.util.List;
 
+import javax.persistence.Entity;
+
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Document
+@Entity
 public class Restaurant extends AbstractEntity {
 
 	@Field("name")
+	@JsonProperty
 	private String name;
+	@JsonProperty
 	private Double rating;
+	@JsonProperty
 	private String owner;
+	@JsonProperty
 	private String phoneNumber;
+	@JsonProperty
 	private List<String> reviewList;
+	@JsonProperty
 	private Integer reviewCount;
+	@JsonProperty
 	private String category;
+	@JsonProperty
 	private String url;
+	@JsonProperty
 	private Location location;
 
 	public Restaurant(String name) {

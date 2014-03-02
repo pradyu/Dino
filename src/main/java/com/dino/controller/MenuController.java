@@ -29,13 +29,13 @@ public class MenuController {
     @Autowired
     MenuAssembler menuAssembler;
 
-    @RequestMapping(value = "/restaurant/{id}/menu", method = RequestMethod.GET)
+    @RequestMapping(value = "/menu", method = RequestMethod.GET)
     @ResponseBody
     public List<MenuResource> getAllRestaurants() {
         return menuAssembler.toResources(menuRepository.findAll());
     }
 
-    @RequestMapping(value = "/restaurant/{id}/menu", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+    @RequestMapping(value = "/menu", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
     @ResponseBody
     public ResponseEntity<Void> createMenu(@RequestBody Menu menu) {
         menu = menuRepository.save(menu);
@@ -44,7 +44,7 @@ public class MenuController {
         return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "/restaurant/{id}/menu/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/menu/{id}", method = RequestMethod.GET)
     @ResponseBody
     public MenuResource getMenu(@PathVariable("id") String id) {
         Menu menu = menuRepository.getMenu(id);
