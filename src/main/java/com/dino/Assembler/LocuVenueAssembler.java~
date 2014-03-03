@@ -1,8 +1,5 @@
 package com.dino.assembler;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
-
 import java.util.logging.Logger;
 
 import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
