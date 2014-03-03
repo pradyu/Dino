@@ -6,29 +6,23 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.List;
-
-import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.test.web.servlet.setup.StandaloneMockMvcBuilder;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.dino.entity.LocuVenue;
 import com.dino.entity.Restaurant;
 import com.dino.repo.AbstractTest;
+import com.dino.rest.entity.LocuVenueResource;
 import com.dino.rest.entity.RestaurantResource;
-import com.dino.yelp.YelpUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebAppConfiguration
@@ -40,28 +34,18 @@ public class RestaurantControllerTest extends AbstractTest {
 	@Autowired
 	private WebApplicationContext ctx;
 	private MockMvc mockMvc;
-	private List<Restaurant> restaurantList;
-	private RestTemplate restTemplate;
 
 	@Before
 	public void setup() {
 		super.setup();
 		mockMvc = MockMvcBuilders
 				.<StandaloneMockMvcBuilder> webAppContextSetup(ctx).build();
-		try {
-			setupYelpRestaurants();
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		
 	}
 
-	
+	@Test
 	public void canCreateAndGetRestaurant() throws Exception {
-		// Restaurant restaurant = new Restaurant("test");
-		for (Restaurant restaurant : restaurantList) {
-
-			MvcResult result = mockMvc
+		 Restaurant restaurant = new Restaurant("test");
+		MvcResult result = mockMvc
 					.perform(
 							post("/restaurant")
 							.accept(MediaType.APPLICATION_JSON)
@@ -85,19 +69,23 @@ public class RestaurantControllerTest extends AbstractTest {
 			assertNotNull(response);
 			assertEquals(restaurant.getName(), response.getRestaurant()
 					.getName());
-			// Check response - restaurant name in the console
-			//System.out.println(response.getRestaurant().getName());
-		}
-
 	}
-
+	
 	@SuppressWarnings("deprecation")
 	@Test
-	public void isYelpDataNull() {
-		assertNotNull(restaurantList);
+	public void testSearchRestaurant() throws Exception{
+		MvcResult result = mockMvc
+				.perform(get("/search?name=jose+tejas&locality=new+york").accept(MediaType.APPLICATION_JSON))
+				.andReturn();
+		assertEquals(result.getResponse().getStatus(), 200);
+		result = mockMvc
+				.perform(get("/search?name=jose+tejas").accept(MediaType.APPLICATION_JSON))
+				.andReturn();
+		assertEquals(result.getResponse().getStatus(), 400);
+		result = mockMvc
+				.perform(get("/search").accept(MediaType.APPLICATION_JSON))
+				.andReturn();
+		assertEquals(result.getResponse().getStatus(), 400);
 	}
-
-	private void setupYelpRestaurants() throws JSONException {
-		restaurantList = YelpUtil.getRestaurantsFromYelp("italian", "New York");
-	}
+	
 }

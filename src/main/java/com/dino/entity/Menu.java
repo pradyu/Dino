@@ -2,10 +2,13 @@ package com.dino.entity;
 
 import java.util.Map;
 
+import javax.persistence.Entity;
+
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 @Document
+@Entity
 public class Menu extends AbstractEntity {
 	@Field
 	private String restaurantName;

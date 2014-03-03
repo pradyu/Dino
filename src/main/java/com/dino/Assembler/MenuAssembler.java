@@ -1,4 +1,4 @@
-package com.dino.Assembler;
+package com.dino.assembler;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
@@ -26,7 +26,7 @@ public class MenuAssembler extends ResourceAssemblerSupport<Menu, MenuResource> 
 
         MenuResource retVal = instantiateResource(menu);
         retVal.setMenu(menu);
-        retVal.add(linkTo(methodOn(MenuController.class).getMenu(menu.getId())).withSelfRel());
+        retVal.add(linkTo(methodOn(MenuController.class).getMenu(menu.getRestaurantId(),menu.getId())).withSelfRel());
         return retVal;
     }
 }

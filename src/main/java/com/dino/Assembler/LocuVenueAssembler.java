@@ -1,7 +1,4 @@
-package com.dino.Assembler;
-
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+package com.dino.assembler;
 
 import java.util.logging.Logger;
 

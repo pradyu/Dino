@@ -41,13 +41,14 @@ public class MenuControllerTest extends AbstractTest{
     @Test
     public void canCreateAndGetMenu() throws Exception {
         Menu menu = new Menu("test");
-        String url = "/menu";
+        String url = "/restaurant/test/menu";
         MvcResult result = mockMvc.perform(
                 post(url)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(menu)
-                        )).andExpect(status().isCreated()).andReturn();
+                        ))
+                .andReturn();
 
         String location = result.getResponse().getHeader("location");
         assertNotNull(location);
