@@ -28,9 +28,9 @@ public class LocuSearchServiceImpl implements LocuSearchService {
 		System.out.println(responseEntity.getBody().toString());
 		LocuVenueArray resultArray = responseEntity.getBody();
 		ArrayList<LocuVenue> locuVenueList = resultArray.getObjects();
-		for (LocuVenue lv : locuVenueList) {
+		/*for (LocuVenue lv : locuVenueList) {
 			System.out.println(lv.toString());
-		}
+		}*/
 		return locuVenueList;
 	}
 
@@ -42,7 +42,7 @@ public class LocuSearchServiceImpl implements LocuSearchService {
 		urlMap.put("locality", location);
 		urlMap.put("category", "restaurant");
 		String url = DinoUtilities.buildUrl(baseUrl, urlMap);
-		System.out.println(url);
+		//System.out.println(url);
 		return url;
 
 	}
