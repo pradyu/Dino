@@ -25,7 +25,7 @@ public class LocuSearchServiceImpl implements LocuSearchService {
 
 		final ResponseEntity<LocuVenueArray> responseEntity = restTemplate
 				.getForEntity(url, LocuVenueArray.class);
-		System.out.println(responseEntity.getBody().toString());
+		//System.out.println(responseEntity.getBody().toString());
 		LocuVenueArray resultArray = responseEntity.getBody();
 		ArrayList<LocuVenue> locuVenueList = resultArray.getObjects();
 		/*for (LocuVenue lv : locuVenueList) {
