@@ -78,14 +78,6 @@ public class RestaurantControllerTest extends AbstractTest {
 				.perform(get("/search?name=jose+tejas&locality=new+york").accept(MediaType.APPLICATION_JSON))
 				.andReturn();
 		assertEquals(result.getResponse().getStatus(), 200);
-		result = mockMvc
-				.perform(get("/search?name=jose+tejas").accept(MediaType.APPLICATION_JSON))
-				.andReturn();
-		assertEquals(result.getResponse().getStatus(), 400);
-		result = mockMvc
-				.perform(get("/search").accept(MediaType.APPLICATION_JSON))
-				.andReturn();
-		assertEquals(result.getResponse().getStatus(), 400);
 	}
 	
 }
