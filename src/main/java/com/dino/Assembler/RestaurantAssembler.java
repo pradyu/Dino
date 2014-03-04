@@ -1,15 +1,16 @@
-package com.dino.Assembler;
+package com.dino.assembler;
+
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+
+import java.util.logging.Logger;
+
+import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
+import org.springframework.stereotype.Component;
 
 import com.dino.controller.RestaurantController;
 import com.dino.entity.Restaurant;
 import com.dino.rest.entity.RestaurantResource;
-import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
-import org.springframework.stereotype.Component;
-
-import java.util.logging.Logger;
-
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @Component
 public class RestaurantAssembler extends ResourceAssemblerSupport<Restaurant, RestaurantResource> {

@@ -1,20 +1,29 @@
 package com.dino.controller;
 
-import com.dino.Assembler.RestaurantAssembler;
-import com.dino.entity.Restaurant;
-import com.dino.repo.RestaurantRepository;
-import com.dino.rest.entity.RestaurantResource;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.List;
-
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+import com.dino.assembler.LocuVenueAssembler;
+import com.dino.assembler.RestaurantAssembler;
+import com.dino.entity.Restaurant;
+import com.dino.repo.RestaurantRepository;
+import com.dino.rest.entity.LocuVenueResource;
+import com.dino.rest.entity.RestaurantResource;
+import com.dino.service.LocuSearchService;
 
 @Controller
 public class RestaurantController {
@@ -23,6 +32,10 @@ public class RestaurantController {
     RestaurantRepository restaurantRepository;
     @Autowired
     RestaurantAssembler restaurantAssembler;
+    @Autowired
+    LocuVenueAssembler locuVenueAssembler;
+    @Autowired
+    LocuSearchService locuSearchService;
 
     @RequestMapping(value = "/restaurant", method = RequestMethod.GET)
     @ResponseBody
@@ -44,5 +57,11 @@ public class RestaurantController {
     public RestaurantResource getRestaurant(@PathVariable("id") String id) {
         Restaurant restaurant = restaurantRepository.getRestaurant(id);
         return restaurantAssembler.toResource(restaurant);
+    }
+    
+    @RequestMapping(value = "/search", method = RequestMethod.GET)
+    @ResponseBody
+    public List<LocuVenueResource> searchRestaurant(@RequestParam(value="name", required=true) String name, @RequestParam(value="locality", required=true) String locality) {
+        return locuVenueAssembler.toResources(locuSearchService.findRestaurants(name, locality));
     }
 }
