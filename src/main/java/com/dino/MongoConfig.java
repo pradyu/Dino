@@ -7,6 +7,7 @@ import com.mongodb.ServerAddress;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.authentication.UserCredentials;
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
@@ -20,7 +21,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 public class MongoConfig extends AbstractMongoConfiguration {
     @Override
     protected String getDatabaseName() {
-        return "dino";
+    	return "CloudFoundry_h2b66e33_g0duf5pb";
     }
 
     @Override
@@ -31,6 +32,11 @@ public class MongoConfig extends AbstractMongoConfiguration {
     	mOps.threadsAllowedToBlockForConnectionMultiplier = 5;
     	mOps.connectTimeout = 1000;
     	//connection to the default host and port - 127.0.0.1:27017
-    	return new Mongo(new ServerAddress(), mOps);
+    	return new Mongo(new ServerAddress("ds033639.mongolab.com",33639), mOps);
     }
+    
+    @Override 
+    protected UserCredentials getUserCredentials() {
+		return new UserCredentials("karnatip","criminal");
+	}
 }
