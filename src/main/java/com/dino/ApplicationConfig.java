@@ -14,10 +14,9 @@ import com.dino.service.LocuSearchServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @ComponentScan({"com.dino"})
-@Import(MongoConfig.class)
 @EnableAutoConfiguration
 @EnableSpringDataWebSupport
-public class ApplicationConfig {
+public class ApplicationConfig extends MongoConfig {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ApplicationConfig.class, args);
