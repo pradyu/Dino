@@ -23,10 +23,12 @@ public class MenuAssembler extends ResourceAssemblerSupport<Menu, MenuResource> 
 
     @Override
     public MenuResource toResource(Menu menu) {
-
-        MenuResource retVal = instantiateResource(menu);
-        retVal.setMenu(menu);
-        retVal.add(linkTo(methodOn(MenuController.class).getMenu(menu.getRestaurantId(),menu.getId())).withSelfRel());
-        return retVal;
+    	if(menu != null){
+    		MenuResource retVal = instantiateResource(menu);
+            retVal.setMenu(menu);
+            retVal.add(linkTo(methodOn(MenuController.class).getMenu(menu.getRestaurantId(),menu.getId())).withSelfRel());
+            return retVal;
+    	}
+        return new MenuResource();
     }
 }

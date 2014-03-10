@@ -26,6 +26,8 @@ public class LocuVenueAssembler extends ResourceAssemblerSupport<LocuVenue, Locu
 	public LocuVenueResource toResource(LocuVenue locuVenue) {
         LocuVenueResource retVal = instantiateResource(locuVenue);
         retVal.setLocuVenue(locuVenue);
+        System.out.println(locuVenue.getName());
+        System.out.println(locuVenue.getLocality());
         retVal.add(linkTo(methodOn(RestaurantController.class).searchRestaurant(locuVenue.getName(), locuVenue.getLocality())).withSelfRel());
         return retVal;
     }
