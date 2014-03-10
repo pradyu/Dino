@@ -23,10 +23,12 @@ public class RestaurantAssembler extends ResourceAssemblerSupport<Restaurant, Re
 
     @Override
     public RestaurantResource toResource(Restaurant restaurant) {
-
-        RestaurantResource retVal = instantiateResource(restaurant);
-        retVal.setRestaurant(restaurant);
-        retVal.add(linkTo(methodOn(RestaurantController.class).getRestaurant(restaurant.getId())).withSelfRel());
-        return retVal;
+    	if(restaurant != null){
+    		RestaurantResource retVal = instantiateResource(restaurant);
+            retVal.setRestaurant(restaurant);
+            retVal.add(linkTo(methodOn(RestaurantController.class).getRestaurant(restaurant.getId())).withSelfRel());
+            return retVal;
+    	}
+        return new RestaurantResource();
     }
 }
