@@ -21,31 +21,34 @@ public class MenuRepositoryImplTest extends AbstractTest {
 
     @Test
     public void canSaveMenu() {
-        Menu menu = new Menu("menu1");
+        Menu menu = new Menu();
+        menu.setRestaurantId("abcdefghijkl");
         Menu retVal = menuRepository.save(menu);
         assertNotNull(retVal);
     }
 
     @Test
-    public void canGetMenuByRestaurantName() {
-        Menu menu = new Menu("sampleRestaurant");
+    public void canGetMenuByRestaurant() {
+    	String restaurantId = "abcdefghijkl";
+        Menu menu = new Menu();
         menuRepository.save(menu);
-        Menu retVal = menuRepository.getMenuByRestaurant("sampleRestaurant");
+        List<Menu> retVal = menuRepository.getMenuListByRestaurant(restaurantId);
         assertNotNull(retVal);
     }
     
     @Test
     public void canGetMenuById() {
-        Menu menu = new Menu("sampleRestaurant");
+        Menu menu = new Menu();
+        menu.setRestaurantId("123456789");
         Menu savedMenu = menuRepository.save(menu);
         Menu retVal = menuRepository.getMenu(savedMenu.getId());
-        assertTrue(savedMenu.equals(retVal));
+        assertTrue(savedMenu.getRestaurantId().equals(retVal.getRestaurantId()));
     }
 
     @Test
     public void canGetAllMenus() {
-        menuRepository.save(new Menu("menu1"));
-        menuRepository.save(new Menu("menu2"));
+        menuRepository.save(new Menu());
+        menuRepository.save(new Menu());
         List<Menu> retVal = menuRepository.findAll();
         assertNotNull(retVal);
         assertTrue(retVal.size() > 1);

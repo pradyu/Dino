@@ -20,6 +20,7 @@ import com.dino.assembler.MenuAssembler;
 import com.dino.entity.Menu;
 import com.dino.repo.MenuRepository;
 import com.dino.rest.entity.MenuResource;
+import com.dino.service.LocuSearchService;
 
 @Controller
 public class MenuController {
@@ -28,20 +29,21 @@ public class MenuController {
     MenuRepository menuRepository;
     @Autowired
     MenuAssembler menuAssembler;
+    @Autowired
+    LocuSearchService locuSearchService;
 
-    @RequestMapping(value = "/restaurant/{id}/menu", method = RequestMethod.GET)
+    @RequestMapping(value = "/restaurant/{restaurantId}/menu", method = RequestMethod.GET)
     @ResponseBody
-    public List<MenuResource> getAllRestaurants(@PathVariable String id) {
-        return menuAssembler.toResources(menuRepository.findAll());
+    public List<MenuResource> getAllMenus(@PathVariable String restaurantId) {
+        return menuAssembler.toResources(menuRepository.getMenuListByRestaurant(restaurantId));
     }
 
-    @RequestMapping(value = "/restaurant/{id}/menu", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+    @RequestMapping(value = "/restaurant/{restaurantId}/menu", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
     @ResponseBody
-    public ResponseEntity<Void> createMenu(@RequestBody Menu menu, @PathVariable("id") String id) {
+    public ResponseEntity<Void> createMenu(@RequestBody Menu menu, @PathVariable("restaurantId") String restaurantId) {
         menu = menuRepository.save(menu);
-        menu.setRestaurantId(id);
         HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(linkTo(methodOn(getClass()).getMenu(id, menu.getId())).toUri());
+        headers.setLocation(linkTo(methodOn(getClass()).getMenusByRestaurantId(restaurantId)).toUri());
         return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
     }
 
@@ -49,6 +51,18 @@ public class MenuController {
     @ResponseBody
     public MenuResource getMenu(@PathVariable("restaurantId") String restaurantId, @PathVariable("menuid") String menuId)  {
         Menu menu = menuRepository.getMenu(menuId);
+        menu.setRestaurantId(restaurantId);
         return menuAssembler.toResource(menu);
+    }
+    
+    @RequestMapping(value = "/restaurant/search/{restaurantId}/menu", method = RequestMethod.GET)
+    @ResponseBody
+    public List<MenuResource> getMenusByRestaurantId(@PathVariable("restaurantId") String restaurantId) {
+    	List<Menu> menuList = locuSearchService.findMenusByRestaurant(restaurantId);
+    	for(Menu menu: menuList){
+    		menu.setRestaurantId(restaurantId);
+    		menu = menuRepository.save(menu);
+    	}
+    	return menuAssembler.toResources(menuList);
     }
 }

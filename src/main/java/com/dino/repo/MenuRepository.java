@@ -11,7 +11,7 @@ public interface MenuRepository extends Repository<Menu, String> {
 
     List<Menu> findAll();
 
-    Menu getMenuByRestaurant(String restaurantId);
+    List<Menu> getMenuListByRestaurant(String restaurantId);
 
     Menu getMenu(String id);
 

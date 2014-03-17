@@ -26,7 +26,7 @@ public class MenuAssembler extends ResourceAssemblerSupport<Menu, MenuResource> 
     	if(menu != null){
     		MenuResource retVal = instantiateResource(menu);
             retVal.setMenu(menu);
-            retVal.add(linkTo(methodOn(MenuController.class).getMenu(menu.getRestaurantId(),menu.getId())).withSelfRel());
+            retVal.add(linkTo(methodOn(MenuController.class).getMenusByRestaurantId(menu.getRestaurantId())).withSelfRel());
             return retVal;
     	}
         return new MenuResource();

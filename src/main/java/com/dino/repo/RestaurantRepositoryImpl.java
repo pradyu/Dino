@@ -1,15 +1,16 @@
 package com.dino.repo;
 
-import com.dino.entity.Restaurant;
+import static org.springframework.data.mongodb.core.query.Criteria.where;
+import static org.springframework.data.mongodb.core.query.Query.query;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
-import static org.springframework.data.mongodb.core.query.Criteria.where;
-import static org.springframework.data.mongodb.core.query.Query.query;
+import com.dino.entity.Restaurant;
 
 @Repository("restaurantRepository")
 public class RestaurantRepositoryImpl implements RestaurantRepository {
@@ -19,7 +20,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepository {
 
     @Override
     public List<Restaurant> findAll() {
-        return operations.findAll(Restaurant.class);
+    	return operations.findAll(Restaurant.class);
     }
 
     @Override

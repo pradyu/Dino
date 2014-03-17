@@ -29,5 +29,17 @@ public class DinoUtilities {
 		}
 		return sb.toString();
 	}
+	
+	public static String encodeUrlParameter(String parameter) {
+		StringBuffer sb = new StringBuffer();
+		for (Character c : parameter.toCharArray()) {
+			if (c == ' ') {
+				sb.append("+");
+			} else {
+				sb.append(c);
+			}
+		}
+		return sb.toString();
+	}
 
 }

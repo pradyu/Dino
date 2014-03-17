@@ -4,9 +4,11 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.dino.entity.LocuVenue;
+import com.dino.entity.Menu;
+import com.dino.entity.Restaurant;
 
 @Service("locuSearchService")
 public interface LocuSearchService {
-	List<LocuVenue> findRestaurants(String name, String locality);
+	List<Restaurant> findRestaurants(String name, String locality);
+	List<Menu> findMenusByRestaurant(String restaurantId);
 }

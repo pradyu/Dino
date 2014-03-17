@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -25,44 +26,70 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebAppConfiguration
 @ActiveProfiles("test")
-public class MenuControllerTest extends AbstractTest{
+public class MenuControllerTest extends AbstractTest {
 
-    private static ObjectMapper objectMapper = new ObjectMapper();
-    @Autowired
-    private WebApplicationContext ctx;
-    private MockMvc mockMvc;
+	private static ObjectMapper objectMapper = new ObjectMapper();
+	@Autowired
+	private WebApplicationContext ctx;
+	private MockMvc mockMvc;
 
-    @Before
-    public void setup() {
-        super.setup();
-        mockMvc = MockMvcBuilders.<StandaloneMockMvcBuilder>webAppContextSetup(ctx).build();
-    }
+	@Before
+	public void setup() {
+		super.setup();
+		mockMvc = MockMvcBuilders
+				.<StandaloneMockMvcBuilder> webAppContextSetup(ctx).build();
+	}
 
-    @Test
-    public void canCreateAndGetMenu() throws Exception {
-        Menu menu = new Menu("test");
-        String url = "/restaurant/test/menu";
-        MvcResult result = mockMvc.perform(
-                post(url)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(menu)
-                        ))
-                .andReturn();
+	@SuppressWarnings("deprecation")
+	@Test
+	@Rollback(false)
+	public void canSearchMenuByRestaurant() throws Exception {
+		String restaurantId = "6ba336aadbcbe1e62f0b";
+		MenuResource[] menuSearchResults = getMenuSearchResults(restaurantId);
+		assertNotNull(menuSearchResults);
+		assertEquals(menuSearchResults.length > 0, true);
+	}
 
-        String location = result.getResponse().getHeader("location");
-        assertNotNull(location);
+	@SuppressWarnings("deprecation")
+	@Test
+	@Rollback(false)
+	public void canSaveAndGetMenu() throws Exception {
+		String restaurantId = "6ba336aadbcbe1e62f0b";
+		MenuResource[] menuSearchResults = getMenuSearchResults(restaurantId);
+		assertNotNull(menuSearchResults);
+		assertEquals(menuSearchResults.length > 0, true);
+		Menu menu = menuSearchResults[0].getMenu();
+		MvcResult result = mockMvc.perform(
+				post("/restaurant/{restaurantId}/menu", restaurantId)
+				.accept(MediaType.APPLICATION_JSON)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(menu)))
+				.andReturn();
+		String location = result.getResponse().getHeader("location");
+		assertNotNull(location);
+		result = mockMvc
+				.perform(get(location).accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk()).andReturn();
+		String content = result.getResponse().getContentAsString();
+		assertNotNull(content);
+		MenuResource[] response = objectMapper.readValue(content,
+				MenuResource[].class);
+		assertNotNull(response);
+		assertEquals(menu.getRestaurantId(), response[0].getMenu()
+				.getRestaurantId());
+	}
 
-        result = mockMvc.perform(
-                get(location)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andReturn();
-
-        String content = result.getResponse().getContentAsString();
-        assertNotNull(content);
-        MenuResource response = objectMapper.readValue(content, MenuResource.class);
-        assertNotNull(response);
-        assertEquals(menu.getRestaurantId(), response.getMenu().getRestaurantId());
-    }
+	private MenuResource[] getMenuSearchResults(String restaurantId)
+			throws Exception {
+		String url = "http://localhost:8080/restaurant/search/{restaurantId}/menu";
+		MvcResult result = mockMvc
+				.perform(
+						get(url, restaurantId).accept(
+								MediaType.APPLICATION_JSON))
+								.andExpect(status().isOk()).andReturn();
+		byte[] content = result.getResponse().getContentAsByteArray();
+		MenuResource[] response = objectMapper.readValue(content,
+				MenuResource[].class);
+		return response;
+	}
 }

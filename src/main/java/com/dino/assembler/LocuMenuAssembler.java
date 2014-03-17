@@ -11,16 +11,15 @@
 //import com.dino.controller.RestaurantController;
 //import com.dino.entity.LocuVenue;
 //import com.dino.rest.entity.LocuVenueResource;
-//import com.dino.yelp.DinoUtilities;
 //
 //@Component
-//public class LocuVenueAssembler extends
+//public class LocuMenuAssembler extends
 //ResourceAssemblerSupport<LocuVenue, LocuVenueResource> {
 //
-//	private static Logger LOG = Logger.getLogger(LocuVenueAssembler.class
+//	private static Logger LOG = Logger.getLogger(LocuMenuAssembler.class
 //			.getName());
 //
-//	public LocuVenueAssembler() {
+//	public LocuMenuAssembler() {
 //		super(RestaurantController.class, LocuVenueResource.class);
 //	}
 //
@@ -28,13 +27,9 @@
 //	public LocuVenueResource toResource(LocuVenue locuVenue) {
 //		LocuVenueResource retVal = instantiateResource(locuVenue);
 //		retVal.setLocuVenue(locuVenue);
-//		String encodedName = DinoUtilities.encodeUrlParameter(locuVenue
-//				.getName());
-//		String encodedLocality = DinoUtilities.encodeUrlParameter(locuVenue
-//				.getLocality());
 //		retVal.add(linkTo(
 //				methodOn(RestaurantController.class).searchRestaurant(
-//						encodedName, encodedLocality)).withSelfRel());
+//						locuVenue.getName(), locuVenue.getLocality())).withSelfRel());
 //		return retVal;
 //
 //	}

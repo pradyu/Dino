@@ -17,51 +17,66 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.dino.assembler.LocuVenueAssembler;
 import com.dino.assembler.RestaurantAssembler;
 import com.dino.entity.Restaurant;
 import com.dino.repo.RestaurantRepository;
-import com.dino.rest.entity.LocuVenueResource;
 import com.dino.rest.entity.RestaurantResource;
 import com.dino.service.LocuSearchService;
 
 @Controller
 public class RestaurantController {
 
-    @Autowired
-    RestaurantRepository restaurantRepository;
-    @Autowired
-    RestaurantAssembler restaurantAssembler;
-    @Autowired
-    LocuVenueAssembler locuVenueAssembler;
-    @Autowired
-    LocuSearchService locuSearchService;
+	@Autowired
+	RestaurantRepository restaurantRepository;
+	@Autowired
+	RestaurantAssembler restaurantAssembler;
+	@Autowired
+	LocuSearchService locuSearchService;
 
-    @RequestMapping(value = "/restaurant", method = RequestMethod.GET)
-    @ResponseBody
-    public List<RestaurantResource> getAllRestaurants() {
-        return restaurantAssembler.toResources(restaurantRepository.findAll());
-    }
+	@RequestMapping(value = "/restaurant", method = RequestMethod.GET)
+	@ResponseBody
+	public List<RestaurantResource> getAllRestaurants() {
+		return restaurantAssembler.toResources(restaurantRepository.findAll());
+	}
 
-    @RequestMapping(value = "/restaurant", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
-    @ResponseBody
-    public ResponseEntity<Void> createRestaurant(@RequestBody Restaurant restaurant) {
-        restaurant = restaurantRepository.save(restaurant);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(linkTo(methodOn(getClass()).getRestaurant(restaurant.getId())).toUri());
-        return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
-    }
+	@RequestMapping(value = "/restaurant", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@ResponseBody
+	public ResponseEntity<Void> createRestaurant(
+			@RequestBody Restaurant restaurant) {
+		restaurant = restaurantRepository.save(restaurant);
+		HttpHeaders headers = new HttpHeaders();
+		headers.setLocation(linkTo(
+				methodOn(getClass()).getRestaurant(restaurant.getId())).toUri());
+		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+	}
 
-    @RequestMapping(value = "/restaurant/{id}", method = RequestMethod.GET)
-    @ResponseBody
-    public RestaurantResource getRestaurant(@PathVariable("id") String id) {
-        Restaurant restaurant = restaurantRepository.getRestaurant(id);
-        return restaurantAssembler.toResource(restaurant);
-    }
-    
-    @RequestMapping(value = "/search", method = RequestMethod.GET)
-    @ResponseBody
-    public List<LocuVenueResource> searchRestaurant(@RequestParam(value="name", required=true) String name, @RequestParam(value="locality", required=true) String locality) {
-        return locuVenueAssembler.toResources(locuSearchService.findRestaurants(name, locality));
-    }
+	@RequestMapping(value = "/restaurant/{id}", method = RequestMethod.GET)
+	@ResponseBody
+	public RestaurantResource getRestaurant(@PathVariable("id") String id) {
+		Restaurant restaurant = restaurantRepository.getRestaurant(id);
+		return restaurantAssembler.toResource(restaurant);
+	}
+
+	@RequestMapping(value = "/restaurant/search", method = RequestMethod.GET)
+	@ResponseBody
+	public List<RestaurantResource> searchRestaurant(
+			@RequestParam(value = "name", required = true) String name,
+			@RequestParam(value = "locality", required = true) String locality) {
+		List<Restaurant> restaurantList = locuSearchService
+		.findRestaurants(name, locality);
+		return restaurantAssembler.toResources(restaurantList);
+	}
+	
+	@RequestMapping(value = "/restaurant/save", method = RequestMethod.GET)
+	@ResponseBody
+	public List<RestaurantResource> searchAndSaveRestaurant(
+			@RequestParam(value = "name", required = true) String name,
+			@RequestParam(value = "locality", required = true) String locality) {
+		List<Restaurant> restaurantList = locuSearchService
+		.findRestaurants(name, locality);
+		for(Restaurant restaurant : restaurantList){
+			restaurantRepository.save(restaurant);
+		}
+		return restaurantAssembler.toResources(restaurantList);
+	}
 }

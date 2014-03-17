@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
@@ -24,9 +25,10 @@ public class MenuRepositoryImpl implements MenuRepository {
 	}
 
 	@Override
-	public Menu getMenuByRestaurant(String restaurantName) {
-		Query query = query(where("restaurantName").is(restaurantName));
-		return operations.findOne(query, Menu.class);
+	public List<Menu> getMenuListByRestaurant(String restaurantId) {
+		Query query = new Query();
+		query.addCriteria(Criteria.where("restaurantId").is(restaurantId));
+		 return operations.find(query, Menu.class);
 	}
 
 	@Override
