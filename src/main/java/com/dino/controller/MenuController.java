@@ -59,6 +59,13 @@ public class MenuController {
     @ResponseBody
     public List<MenuResource> getMenusByRestaurantId(@PathVariable("restaurantId") String restaurantId) {
     	List<Menu> menuList = locuSearchService.findMenusByRestaurant(restaurantId);
+    	return menuAssembler.toResources(menuList);
+    }
+    
+    @RequestMapping(value = "/restaurant/save/{restaurantId}/menu", method = RequestMethod.GET)
+    @ResponseBody
+    public List<MenuResource> saveMenusByRestaurantId(@PathVariable("restaurantId") String restaurantId) {
+    	List<Menu> menuList = locuSearchService.findMenusByRestaurant(restaurantId);
     	for(Menu menu: menuList){
     		menu.setRestaurantId(restaurantId);
     		menu = menuRepository.save(menu);

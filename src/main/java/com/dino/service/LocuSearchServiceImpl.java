@@ -15,7 +15,6 @@ import com.dino.entity.Menu;
 import com.dino.entity.Restaurant;
 import com.dino.yelp.DinoUtilities;
 
-
 public class LocuSearchServiceImpl implements LocuSearchService {
 
 	@Autowired
@@ -24,10 +23,37 @@ public class LocuSearchServiceImpl implements LocuSearchService {
 
 	@Override
 	public List<Restaurant> findRestaurants(String name, String locality) {
+		return findRestaurants(name, locality, null, null, null, null, null,
+				null, null, null);
+	}
+
+	@Override
+	public List<Restaurant> findRestaurants(String name, String locality,
+			String cuisine, String region, String postal_code, String country,
+			Float radius, String street_address, String open_at,
+			Boolean has_menu) {
 		String baseUrl = "http://api.locu.com/v1_0/venue/search/";
-		Map<String,String> urlMap = new TreeMap<String, String>();
-		urlMap.put("name", name);
-		urlMap.put("locality", locality);
+		Map<String, Object> urlMap = new TreeMap<String, Object>();
+		if (name != null)
+			urlMap.put("name", name);
+		if (locality != null)
+			urlMap.put("locality", locality);
+		if (cuisine != null)
+			urlMap.put("cuisine", cuisine);
+		if (region != null)
+			urlMap.put("region", region);
+		if (postal_code != null)
+			urlMap.put("postal_code", postal_code);
+		if (country != null)
+			urlMap.put("country", country);
+		if (radius != null)
+			urlMap.put("radius", radius);
+		if (street_address != null)
+			urlMap.put("street_address", street_address);
+		if (open_at != null)
+			urlMap.put("open_at", open_at);
+		if (has_menu != null)
+			urlMap.put("has_menu", has_menu);
 		String queryString = this.getQueryString(baseUrl, urlMap);
 		final ResponseEntity<LocuVenueArray> responseEntity = restTemplate
 				.getForEntity(queryString, LocuVenueArray.class);
@@ -38,23 +64,25 @@ public class LocuSearchServiceImpl implements LocuSearchService {
 
 	@Override
 	public List<Menu> findMenusByRestaurant(String locuRestaurantId) {
-		String baseUrl = "http://api.locu.com/v1_0/venue/"+locuRestaurantId+"/";
-		String queryString = this.getQueryString(baseUrl, new TreeMap<String, String>());
+		String baseUrl = "http://api.locu.com/v1_0/venue/" + locuRestaurantId
+				+ "/";
+		String queryString = this.getQueryString(baseUrl,
+				new TreeMap<String, Object>());
 		final ResponseEntity<LocuVenueArray> responseEntity = restTemplate
 				.getForEntity(queryString, LocuVenueArray.class);
 		LocuVenueArray resultArray = responseEntity.getBody();
 		ArrayList<Restaurant> locuVenueList = resultArray.getObjects();
-		if(locuVenueList != null && locuVenueList.size() > 0){
+		if (locuVenueList != null && locuVenueList.size() > 0) {
 			return locuVenueList.get(0).getMenus();
 		}
 		return Collections.emptyList();
 	}
-	
-	private String getQueryString(String baseUrl, Map<String, String> urlMap) {
+
+	private String getQueryString(String baseUrl, Map<String, Object> urlMap) {
 		urlMap.put("api_key", API_KEY);
 		urlMap.put("category", "restaurant");
 		String url = DinoUtilities.buildUrl(baseUrl, urlMap);
+		System.out.println(url);
 		return url;
 	}
-
 }

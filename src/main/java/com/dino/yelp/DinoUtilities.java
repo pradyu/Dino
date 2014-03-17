@@ -14,11 +14,11 @@ public class DinoUtilities {
 	private DinoUtilities() {
 	}
 
-	public static String buildUrl(String baseUrl, Map<String, String> urlMap) {
+	public static String buildUrl(String baseUrl, Map<String, Object> urlMap) {
 		StringBuffer sb = new StringBuffer(baseUrl);
 		int counter = 0;
 		if (urlMap != null) {
-			for (Map.Entry<String, String> entry : urlMap.entrySet()) {
+			for (Map.Entry<String, Object> entry : urlMap.entrySet()) {
 				if (counter == 0)sb.append("?");
 				 else sb.append("&");
 				sb.append(entry.getKey());

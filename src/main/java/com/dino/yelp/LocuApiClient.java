@@ -1,4 +1,4 @@
-package com.dino.yelp;
+/*package com.dino.yelp;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -65,3 +65,4 @@ public class LocuApiClient {
 		}
 	}
 }
+*/

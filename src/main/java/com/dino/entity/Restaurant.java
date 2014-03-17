@@ -9,6 +9,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * 
+ */
 @Document
 @Entity
 @JsonIgnoreProperties({ "facebook_url", "open_hours", "redirected_from",
@@ -175,22 +178,6 @@ public class Restaurant extends AbstractEntity {
 		this.id = id;
 	}
 
-	@Override
-	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("id: " + id + "\n").append("name: " + name + "\n")
-				.append("locality: " + locality + "\n")
-				.append("street_address: " + street_address + "\n")
-				.append("postal_code: " + postal_code + "\n")
-				.append("country: " + country + "\n")
-				.append("phone: " + phone + "\n")
-				.append("resource_uri: " + resource_uri + "\n");
-		for (Menu menu : menus) {
-			sb.append(menu.toString() + "\n");
-		}
-		return sb.toString();
-	}
-
 	public Boolean getHas_menu() {
 		return has_menu;
 	}
@@ -237,5 +224,21 @@ public class Restaurant extends AbstractEntity {
 
 	public void setSimilar_venues(List<String> similar_venues) {
 		this.similar_venues = similar_venues;
+	}
+	
+	@Override
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("id: " + id + "\n").append("name: " + name + "\n")
+				.append("locality: " + locality + "\n")
+				.append("street_address: " + street_address + "\n")
+				.append("postal_code: " + postal_code + "\n")
+				.append("country: " + country + "\n")
+				.append("phone: " + phone + "\n")
+				.append("resource_uri: " + resource_uri + "\n");
+		for (Menu menu : menus) {
+			sb.append(menu.toString() + "\n");
+		}
+		return sb.toString();
 	}
 }

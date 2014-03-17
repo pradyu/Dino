@@ -60,10 +60,18 @@ public class RestaurantController {
 	@RequestMapping(value = "/restaurant/search", method = RequestMethod.GET)
 	@ResponseBody
 	public List<RestaurantResource> searchRestaurant(
-			@RequestParam(value = "name", required = true) String name,
-			@RequestParam(value = "locality", required = true) String locality) {
+			@RequestParam(value = "name", required = false) String name,
+			@RequestParam(value = "locality", required = false) String locality,
+			@RequestParam(value = "cuisine", required = false) String cuisine,
+			@RequestParam(value = "region", required = false) String region,
+			@RequestParam(value = "postal_code", required = false) String postal_code,
+			@RequestParam(value = "country", required = false) String country, 
+			@RequestParam(value = "radius", required = false) Float radius, 
+			@RequestParam(value = "street_address", required = false) String street_address,
+			@RequestParam(value = "open_at", required = false) String open_at,
+			@RequestParam(value = "has_menu", required = false) Boolean has_menu) {
 		List<Restaurant> restaurantList = locuSearchService
-		.findRestaurants(name, locality);
+		.findRestaurants(name, locality, cuisine, region, postal_code, country, radius, street_address, open_at, has_menu);
 		return restaurantAssembler.toResources(restaurantList);
 	}
 	
