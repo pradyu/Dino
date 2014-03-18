@@ -59,6 +59,9 @@ public class MenuController {
     @ResponseBody
     public List<MenuResource> getMenusByRestaurantId(@PathVariable("restaurantId") String restaurantId) {
     	List<Menu> menuList = locuSearchService.findMenusByRestaurant(restaurantId);
+    	for(Menu menu: menuList){
+    		menu.setRestaurantId(restaurantId);
+    	}
     	return menuAssembler.toResources(menuList);
     }
     
