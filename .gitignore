@@ -1,3 +1,17 @@
+
+# Configuration Files #
+.gradle
+/local.properties
+
+# Mac OS Files #
+.DS_Store
+
+# IDE Files #
+*.iml
+.idea/*
+/.idea/workspace.xml
+
+# Compiled Files #
 *.class
 
 # Package Files #
