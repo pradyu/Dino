@@ -11,6 +11,17 @@ android {
         versionName "1.0"
     }
     buildTypes {
+
+        debug {
+            packageNameSuffix "dev"
+            debuggable true
+        }
+
+        dev.initWith(buildTypes.debug)
+        dev {
+            runProguard false
+        }
+
         release {
             runProguard false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
