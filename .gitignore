@@ -1,6 +1,5 @@
 
 # Configuration Files #
-.gradle
 /local.properties
 
 # Mac OS Files #
@@ -18,3 +17,6 @@
 *.jar
 *.war
 *.ear
+
+# gradle
+.gradle/
