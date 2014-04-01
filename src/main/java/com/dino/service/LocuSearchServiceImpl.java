@@ -10,10 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-import com.dino.entity.LocuVenueArray;
 import com.dino.entity.Menu;
 import com.dino.entity.Restaurant;
-import com.dino.yelp.DinoUtilities;
+import com.dino.sandbox.DinoUtilities;
 
 public class LocuSearchServiceImpl implements LocuSearchService {
 
@@ -55,9 +54,9 @@ public class LocuSearchServiceImpl implements LocuSearchService {
 		if (has_menu != null)
 			urlMap.put("has_menu", has_menu);
 		String queryString = this.getQueryString(baseUrl, urlMap);
-		final ResponseEntity<LocuVenueArray> responseEntity = restTemplate
-				.getForEntity(queryString, LocuVenueArray.class);
-		LocuVenueArray resultArray = responseEntity.getBody();
+		final ResponseEntity<Restaurant.RestaurantResponse> responseEntity = restTemplate
+				.getForEntity(queryString, Restaurant.RestaurantResponse.class);
+		Restaurant.RestaurantResponse resultArray = responseEntity.getBody();
 		ArrayList<Restaurant> locuVenueList = resultArray.getObjects();
 		return locuVenueList;
 	}
@@ -68,9 +67,9 @@ public class LocuSearchServiceImpl implements LocuSearchService {
 				+ "/";
 		String queryString = this.getQueryString(baseUrl,
 				new TreeMap<String, Object>());
-		final ResponseEntity<LocuVenueArray> responseEntity = restTemplate
-				.getForEntity(queryString, LocuVenueArray.class);
-		LocuVenueArray resultArray = responseEntity.getBody();
+		final ResponseEntity<Restaurant.RestaurantResponse> responseEntity = restTemplate
+				.getForEntity(queryString, Restaurant.RestaurantResponse.class);
+		Restaurant.RestaurantResponse resultArray = responseEntity.getBody();
 		ArrayList<Restaurant> locuVenueList = resultArray.getObjects();
 		if (locuVenueList != null && locuVenueList.size() > 0) {
 			return locuVenueList.get(0).getMenus();

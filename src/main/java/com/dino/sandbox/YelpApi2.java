@@ -1,4 +1,4 @@
-package com.dino.yelp;
+package com.dino.sandbox;
 
 import org.scribe.model.Token;
 import org.scribe.builder.api.DefaultApi10a;

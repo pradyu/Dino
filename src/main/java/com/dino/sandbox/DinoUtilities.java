@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.dino.yelp;
+package com.dino.sandbox;
 
 import java.util.Map;
 

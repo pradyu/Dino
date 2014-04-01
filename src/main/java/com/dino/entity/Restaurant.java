@@ -1,12 +1,16 @@
 package com.dino.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnoreType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -15,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Document
 @Entity
 @JsonIgnoreProperties({ "facebook_url", "open_hours", "redirected_from",
-		"twitter_id" })
+"twitter_id" })
 public class Restaurant extends AbstractEntity {
 	private String locu_id;
 	@JsonProperty
@@ -225,20 +229,51 @@ public class Restaurant extends AbstractEntity {
 	public void setSimilar_venues(List<String> similar_venues) {
 		this.similar_venues = similar_venues;
 	}
-	
+
 	@Override
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("id: " + id + "\n").append("name: " + name + "\n")
-				.append("locality: " + locality + "\n")
-				.append("street_address: " + street_address + "\n")
-				.append("postal_code: " + postal_code + "\n")
-				.append("country: " + country + "\n")
-				.append("phone: " + phone + "\n")
-				.append("resource_uri: " + resource_uri + "\n");
+		.append("locality: " + locality + "\n")
+		.append("street_address: " + street_address + "\n")
+		.append("postal_code: " + postal_code + "\n")
+		.append("country: " + country + "\n")
+		.append("phone: " + phone + "\n")
+		.append("resource_uri: " + resource_uri + "\n");
 		for (Menu menu : menus) {
 			sb.append(menu.toString() + "\n");
 		}
 		return sb.toString();
+	}
+
+	@Entity
+	@JsonAutoDetect
+	@JsonIgnoreProperties({ "not_found" })
+	public	static class RestaurantResponse {
+		@JsonIgnoreType
+		private static class Meta {
+		}
+
+		@JsonIgnore
+		private Meta meta;
+		@JsonProperty
+		private ArrayList<Restaurant> objects;
+
+		public Meta getMeta() {
+			return meta;
+		}
+
+		public void setMeta(Meta meta) {
+			this.meta = meta;
+		}
+
+		public ArrayList<Restaurant> getObjects() {
+			return objects;
+		}
+
+		public void setObjects(ArrayList<Restaurant> objects) {
+			this.objects = objects;
+		}
+
 	}
 }

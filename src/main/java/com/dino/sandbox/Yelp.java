@@ -1,4 +1,4 @@
-package com.dino.yelp;
+package com.dino.sandbox;
 
 /*
  Example code based on code from Nicholas Smith at http://imnes.blogspot.com/2011/01/how-to-use-yelp-v2-from-java-including.html
